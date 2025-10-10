@@ -18,6 +18,7 @@
 #import "OIDTVAuthorizationRequest.h"
 #import "OIDTVServiceConfiguration.h"
 #import "OIDURLQueryComponent.h"
+#import "OIDTokenUtilities.h"
 
 @implementation OIDTVAuthorizationRequest
 
@@ -108,6 +109,21 @@
       [[NSURLRequest requestWithURL:tvConfiguration.deviceAuthorizationEndpoint] mutableCopy];
   URLRequest.HTTPMethod = kHTTPPost;
   [URLRequest setValue:kHTTPContentTypeHeaderValue forHTTPHeaderField:kHTTPContentTypeHeaderKey];
+  if (self.clientSecret) {
+    // The client id and secret are encoded using the "application/x-www-form-urlencoded"
+    // encoding algorithm per RFC 6749 Section 2.3.1.
+    // https://tools.ietf.org/html/rfc6749#section-2.3.1
+    NSString *encodedClientID = [OIDTokenUtilities formUrlEncode:self.clientID];
+    NSString *encodedClientSecret = [OIDTokenUtilities formUrlEncode:self.clientSecret];
+
+    NSString *credentials =
+        [NSString stringWithFormat:@"%@:%@", encodedClientID, encodedClientSecret];
+    NSData *plainData = [credentials dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *basicAuth = [plainData base64EncodedStringWithOptions:kNilOptions];
+
+    NSString *authValue = [NSString stringWithFormat:@"Basic %@", basicAuth];
+    [URLRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
+  }
   NSString *bodyString = [query URLEncodedParameters];
   NSData *body = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
   URLRequest.HTTPBody = body;
