@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)
     initWithConfiguration:(OIDTVServiceConfiguration *)configuration
                  clientId:(NSString *)clientID
-             clientSecret:(NSString *)clientSecret
+             clientSecret:(nullable NSString *)clientSecret
                    scopes:(nullable NSArray<NSString *> *)scopes
      additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
 
