@@ -113,7 +113,17 @@ NS_ASSUME_NONNULL_BEGIN
       && OIDIsEqualIncludingNil(standardizedURL.password, standardizedRedirectURL.password)
       && OIDIsEqualIncludingNil(standardizedURL.host, standardizedRedirectURL.host)
       && OIDIsEqualIncludingNil(standardizedURL.port, standardizedRedirectURL.port)
-      && OIDIsEqualIncludingNil(standardizedURL.path, standardizedRedirectURL.path);
+      && [self URL:standardizedURL hasSamePathAsRedirectionURL:standardizedRedirectURL];
+}
+
++ (BOOL)URL:(NSURL *)URL hasSamePathAsRedirectionURL:(NSURL *) redirectionURL {
+  return OIDIsEqualIncludingNil(URL.path, redirectionURL.path)
+    || [self URL:URL hasSimilarPathAsURL:redirectionURL]
+    || [self URL:redirectionURL hasSimilarPathAsURL:URL] ;
+}
+
++ (BOOL)URL:(NSURL *)URL hasSimilarPathAsURL:(NSURL *) secondURL {
+  return [URL.path isEqualToString:@"/"] && [secondURL.path isEqualToString:@""];
 }
 
 - (BOOL)shouldHandleURL:(NSURL *)URL {
