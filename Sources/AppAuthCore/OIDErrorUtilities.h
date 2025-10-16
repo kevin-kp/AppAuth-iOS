@@ -73,17 +73,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSError *)HTTPErrorWithHTTPResponse:(NSHTTPURLResponse *)HTTPURLResponse
                                   data:(nullable NSData *)data;
 
-/*! @brief Raises an exception with the given name as both the name, and the message.
-    @param name The name of the exception.
- */
-+ (void)raiseException:(NSString *)name;
-
-/*! @brief Raises an exception with the given name and message.
-    @param name The name of the exception.
-    @param message The message of the exception.
- */
-+ (void)raiseException:(NSString *)name message:(NSString *)message;
-
 /*! @brief Converts an OAuth error code into an @c ::OIDErrorCodeOAuth error code.
     @param errorCode The OAuth error code.
     @discussion Returns @c ::OIDErrorCodeOAuthOther if the string is not in AppAuth's list.

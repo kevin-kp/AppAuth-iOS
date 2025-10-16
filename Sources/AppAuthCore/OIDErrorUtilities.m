@@ -160,13 +160,4 @@
     return OIDErrorCodeOAuthOther;
   }
 }
-
-+ (void)raiseException:(NSString *)name {
-  [[self class] raiseException:name message:name];
-}
-
-+ (void)raiseException:(NSString *)name message:(NSString *)message {
-  [NSException raise:name format:@"%@", message];
-}
-
 @end

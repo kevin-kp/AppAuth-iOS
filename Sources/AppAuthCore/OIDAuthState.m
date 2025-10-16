@@ -414,15 +414,15 @@ static const NSUInteger kExpiryTimeTolerance = 60;
 
 #pragma mark - OAuth Requests
 
-- (OIDTokenRequest *)tokenRefreshRequest {
+- (nullable OIDTokenRequest *)tokenRefreshRequest {
   return [self tokenRefreshRequestWithAdditionalParameters:nil];
 }
 
-- (OIDTokenRequest *)tokenRefreshRequestWithAdditionalParameters:
+- (nullable OIDTokenRequest *)tokenRefreshRequestWithAdditionalParameters:
     (NSDictionary<NSString *, NSString *> *)additionalParameters {
 
   if (!_refreshToken) {
-    [OIDErrorUtilities raiseException:kRefreshTokenRequestException];
+    return nil;
   }
   return [[OIDTokenRequest alloc]
       initWithConfiguration:_lastAuthorizationResponse.request.configuration
@@ -438,13 +438,13 @@ static const NSUInteger kExpiryTimeTolerance = 60;
           additionalHeaders:nil];
 }
 
-- (OIDTokenRequest *)tokenRefreshRequestWithAdditionalParameters:
+- (nullable OIDTokenRequest *)tokenRefreshRequestWithAdditionalParameters:
     (NSDictionary<NSString *, NSString *> *)additionalParameters
                                                additionalHeaders:
     (NSDictionary<NSString *,NSString *> *)additionalHeaders {
 
   if (!_refreshToken) {
-    [OIDErrorUtilities raiseException:kRefreshTokenRequestException];
+    return nil;
   }
   return [[OIDTokenRequest alloc]
       initWithConfiguration:_lastAuthorizationResponse.request.configuration
@@ -460,11 +460,11 @@ static const NSUInteger kExpiryTimeTolerance = 60;
           additionalHeaders:additionalHeaders];
 }
 
-- (OIDTokenRequest *)tokenRefreshRequestWithAdditionalHeaders:
+- (nullable OIDTokenRequest *)tokenRefreshRequestWithAdditionalHeaders:
     (NSDictionary<NSString *, NSString *> *)additionalHeaders {
 
   if (!_refreshToken) {
-    [OIDErrorUtilities raiseException:kRefreshTokenRequestException];
+    return nil;
   }
   return [[OIDTokenRequest alloc]
       initWithConfiguration:_lastAuthorizationResponse.request.configuration
