@@ -31,7 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
     @remarks device_code
     @see https://tools.ietf.org/html/rfc8628#section-3.4
  */
-@property(nonatomic, readonly) NSString *deviceCode;
+@property(nonatomic, readonly, nullable) NSString *deviceCode;
+@property(nonatomic, nullable) NSString *username;
+@property(nonatomic, nullable) NSString *password;
 
 /*! @internal
     @brief Unavailable. Please use
@@ -111,6 +113,22 @@ NS_ASSUME_NONNULL_BEGIN
                     additionalHeaders:
                      (nullable NSDictionary<NSString *, NSString *> *)additionalHeaders
     NS_DESIGNATED_INITIALIZER;
+
+/*! @brief Designated initializer.
+    @param configuration The service's configuration.
+    @param username The username that the user has given.
+    @param password The password that the user has given.
+    @param clientID The client identifier.
+    @param clientSecret The client secret (nullable).
+    @param additionalParameters The client's additional token request parameters.
+*/
+- (instancetype)initWithConfiguration:(OIDTVServiceConfiguration *)configuration
+                             username:(nonnull NSString *)username
+                             password:(nonnull NSString *)password
+                             clientID:(NSString *)clientID
+                         clientSecret:(nullable NSString *)clientSecret
+                 additionalParameters:
+                     (nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
 
 /*! @brief Designated initializer for NSSecureCoding.
     @param aDecoder Unarchiver object to decode

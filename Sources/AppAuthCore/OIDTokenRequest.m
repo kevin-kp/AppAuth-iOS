@@ -382,4 +382,6 @@ static NSString *const kAdditionalHeadersKey = @"additionalHeaders";
   return URLRequest;
 }
 
+- (void) removeSensitiveData {}
+
 @end

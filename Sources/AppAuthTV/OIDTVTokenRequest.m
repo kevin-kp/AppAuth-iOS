@@ -25,6 +25,8 @@
 /*! @brief The key for the @c deviceCode property for @c NSSecureCoding and request body.
  */
 static NSString *const kDeviceCodeKey = @"device_code";
+static NSString *const kUsernameKey = @"username";
+static NSString *const kPasswordKey = @"password";
 
 /*! @brief Key used to encode the @c grantType property for @c NSSecureCoding and request body.
  */
@@ -127,6 +129,36 @@ static NSString *const kOIDTVDeviceTokenGrantType = @"urn:ietf:params:oauth:gran
   return self;
 }
 
+- (instancetype)initWithConfiguration:(OIDTVServiceConfiguration *)configuration
+                             username:(NSString *)username
+                             password:(NSString *)password
+                             clientID:(NSString *)clientID
+                         clientSecret:(NSString *)clientSecret
+                 additionalParameters:(NSDictionary<NSString *, NSString *> *)additionalParameters {
+  self = [super initWithConfiguration:configuration
+                            grantType:OIDGrantTypePassword
+                    authorizationCode:nil
+                          redirectURL:[[NSURL alloc] initWithString:@""]
+                             clientID:clientID
+                         clientSecret:clientSecret
+                                scope:nil
+                         refreshToken:nil
+                         codeVerifier:nil
+                 additionalParameters:additionalParameters
+                    additionalHeaders:nil];
+
+  if (self) {
+    _username = [username copy];
+    _password = [password copy];
+  }
+  return self;
+}
+
+- (void)removeSensitiveData {
+  _username = nil;
+  _password = nil;
+}
+
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(nullable NSZone *)zone {
@@ -164,7 +196,17 @@ static NSString *const kOIDTVDeviceTokenGrantType = @"urn:ietf:params:oauth:gran
     [query addParameter:kGrantTypeKey value:self.grantType];
   }
 
-  [query addParameter:kDeviceCodeKey value:self.deviceCode];
+  if (self.deviceCode) {
+    [query addParameter:kDeviceCodeKey value:self.deviceCode];
+  }
+
+  if (self.username) {
+    [query addParameter:kUsernameKey value:self.username];
+  }
+
+  if (self.password) {
+    [query addParameter:kPasswordKey value:self.password];
+  }
 
   [query addParameters:self.additionalParameters];
 

@@ -41,6 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)cancelWithCompletion:(nullable void (^)(void))completion;
 
+- (BOOL)shouldHandleURL:(NSURL *)URL;
+
 /*! @brief Clients should call this method with the result of the external user-agent code flow if
         it becomes available.
     @param URL The redirect URL invoked by the server.

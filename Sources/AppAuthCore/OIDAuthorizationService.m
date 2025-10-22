@@ -532,6 +532,7 @@ NS_ASSUME_NONNULL_BEGIN
       return;
     }
 
+    [request removeSensitiveData];
     OIDTokenResponse *tokenResponse =
         [[OIDTokenResponse alloc] initWithRequest:request parameters:json];
     if (!tokenResponse) {

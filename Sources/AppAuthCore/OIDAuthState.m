@@ -367,6 +367,9 @@ static const NSUInteger kExpiryTimeTolerance = 60;
 
 - (void)updateWithTokenResponse:(nullable OIDTokenResponse *)tokenResponse
                           error:(nullable NSError *)error {
+  if (tokenResponse) {
+    [tokenResponse.request removeSensitiveData];
+  }
   if (_authorizationError) {
     // Calling updateWithTokenResponse while in an error state probably means the developer obtained
     // a new token and did the exchange without also calling updateWithAuthorizationResponse.

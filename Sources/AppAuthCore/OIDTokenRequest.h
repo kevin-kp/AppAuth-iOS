@@ -219,6 +219,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSURLRequest *)URLRequest;
 
+- (void) removeSensitiveData;
+
 @end
 
 NS_ASSUME_NONNULL_END
