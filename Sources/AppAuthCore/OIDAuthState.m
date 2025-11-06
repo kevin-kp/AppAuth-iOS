@@ -428,12 +428,12 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     return nil;
   }
   return [[OIDTokenRequest alloc]
-      initWithConfiguration:_lastAuthorizationResponse.request.configuration
+      initWithConfiguration:[self getConfiguration]
                   grantType:OIDGrantTypeRefreshToken
           authorizationCode:nil
                 redirectURL:nil
-                   clientID:_lastAuthorizationResponse.request.clientID
-               clientSecret:_lastAuthorizationResponse.request.clientSecret
+                   clientID:[self getClientID]
+               clientSecret:[self getClientSecret]
                       scope:nil
                refreshToken:_refreshToken
                codeVerifier:nil
@@ -450,12 +450,12 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     return nil;
   }
   return [[OIDTokenRequest alloc]
-      initWithConfiguration:_lastAuthorizationResponse.request.configuration
+      initWithConfiguration:[self getConfiguration]
                   grantType:OIDGrantTypeRefreshToken
           authorizationCode:nil
                 redirectURL:nil
-                   clientID:_lastAuthorizationResponse.request.clientID
-               clientSecret:_lastAuthorizationResponse.request.clientSecret
+                   clientID:[self getClientID]
+               clientSecret:[self getClientSecret]
                       scope:nil
                refreshToken:_refreshToken
                codeVerifier:nil
@@ -470,17 +470,47 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     return nil;
   }
   return [[OIDTokenRequest alloc]
-      initWithConfiguration:_lastAuthorizationResponse.request.configuration
+      initWithConfiguration:[self getConfiguration]
                   grantType:OIDGrantTypeRefreshToken
           authorizationCode:nil
                 redirectURL:nil
-                   clientID:_lastAuthorizationResponse.request.clientID
-               clientSecret:_lastAuthorizationResponse.request.clientSecret
+                   clientID:[self getClientID]
+               clientSecret:[self getClientSecret]
                       scope:nil
                refreshToken:_refreshToken
                codeVerifier:nil
        additionalParameters:nil
           additionalHeaders:additionalHeaders];
+}
+
+- (nullable OIDServiceConfiguration*)getConfiguration {
+  if (_lastAuthorizationResponse) {
+    return _lastAuthorizationResponse.request.configuration;
+  }
+  if (_lastTokenResponse) {
+    return _lastTokenResponse.request.configuration;
+  }
+  return nil;
+}
+
+- (nullable NSString*)getClientID {
+  if (_lastAuthorizationResponse) {
+    return _lastAuthorizationResponse.request.clientID;
+  }
+  if (_lastTokenResponse) {
+    return _lastTokenResponse.request.clientID;
+  }
+  return nil;
+}
+
+- (nullable NSString*)getClientSecret {
+  if (_lastAuthorizationResponse) {
+    return _lastAuthorizationResponse.request.clientSecret;
+  }
+  if (_lastTokenResponse) {
+    return _lastTokenResponse.request.clientSecret;
+  }
+  return nil;
 }
 
 #pragma mark - Stateful Actions
