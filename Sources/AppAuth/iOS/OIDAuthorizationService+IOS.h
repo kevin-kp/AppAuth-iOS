@@ -60,6 +60,11 @@ NS_ASSUME_NONNULL_BEGIN
      prefersEphemeralSession:(BOOL)prefersEphemeralSession
                     callback:(OIDAuthorizationCallback)callback API_AVAILABLE(ios(13));
 
++ (id<OIDExternalUserAgentSession>)
+    presentEndSessionRequest:(OIDEndSessionRequest *)request
+    presentingViewController:(UIViewController *)presentingViewController
+                    callback:(OIDEndSessionCallback)callback;
+
 @end
 
 NS_ASSUME_NONNULL_END
