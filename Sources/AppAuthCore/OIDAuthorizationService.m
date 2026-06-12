@@ -437,7 +437,26 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 + (void)performTokenRequest:(OIDTokenRequest *)request
+    shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
+                                callback:(OIDTokenCallback)callback {
+  [[self class] performTokenRequest:request
+      originalAuthorizationResponse:nil
+shouldSkipNonceAndAudienceValidation:shouldSkipNonceAndAudienceValidation
+                           callback:callback];
+}
+
++ (void)performTokenRequest:(OIDTokenRequest *)request
     originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
+                         callback:(OIDTokenCallback)callback {
+  [[self class] performTokenRequest:request
+      originalAuthorizationResponse:authorizationResponse
+shouldSkipNonceAndAudienceValidation:NO
+                           callback:callback];
+}
+
++ (void)performTokenRequest:(OIDTokenRequest *)request
+    originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
+shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
                          callback:(OIDTokenCallback)callback {
 
   NSURLRequest *URLRequest = [request URLRequest];
@@ -589,7 +608,8 @@ NS_ASSUME_NONNULL_BEGIN
       // Validates that the aud (audience) Claim contains the client ID, or that the azp
       // (authorized party) Claim matches the client ID.
       NSString *clientID = tokenResponse.request.clientID;
-      if (![idToken.audience containsObject:clientID] &&
+      if (!shouldSkipNonceAndAudienceValidation &&
+          ![idToken.audience containsObject:clientID] &&
           ![idToken.claims[@"azp"] isEqualToString:clientID]) {
         NSError *invalidIDToken =
           [OIDErrorUtilities errorWithCode:OIDErrorCodeIDTokenFailedValidationError
@@ -650,7 +670,7 @@ NS_ASSUME_NONNULL_BEGIN
         // OpenID Connect Core Section 3.1.3.7. rule #11
         // Validates the nonce.
         NSString *nonce = authorizationResponse.request.nonce;
-        if (nonce && ![idToken.nonce isEqual:nonce]) {
+        if (!shouldSkipNonceAndAudienceValidation && nonce && ![idToken.nonce isEqual:nonce]) {
           NSError *invalidIDToken =
           [OIDErrorUtilities errorWithCode:OIDErrorCodeIDTokenFailedValidationError
                            underlyingError:nil

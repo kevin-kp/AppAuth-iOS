@@ -47,6 +47,19 @@
                      presentingViewController:(UIViewController *)presentingViewController
                       prefersEphemeralSession:(BOOL)prefersEphemeralSession
                                      callback:(OIDAuthStateAuthorizationCallback)callback {
+  return [self authStateByPresentingAuthorizationRequest:authorizationRequest
+                                presentingViewController:presentingViewController
+                                 prefersEphemeralSession:prefersEphemeralSession
+                    shouldSkipNonceAndAudienceValidation:NO
+                                                callback:callback];
+}
+
++ (id<OIDExternalUserAgentSession>)
+    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
+                     presentingViewController:(UIViewController *)presentingViewController
+                      prefersEphemeralSession:(BOOL)prefersEphemeralSession
+         shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
+                                     callback:(OIDAuthStateAuthorizationCallback)callback {
   id<OIDExternalUserAgent> externalUserAgent;
 #if TARGET_OS_MACCATALYST
   externalUserAgent = [[OIDExternalUserAgentCatalyst alloc]
@@ -59,6 +72,7 @@
 #endif // TARGET_OS_MACCATALYST
   return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                        externalUserAgent:externalUserAgent
+                    shouldSkipNonceAndAudienceValidation:shouldSkipNonceAndAudienceValidation
                                                 callback:callback];
 }
 

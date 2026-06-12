@@ -123,6 +123,17 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
                                      callback:(OIDAuthStateAuthorizationCallback)callback {
+  return [self authStateByPresentingAuthorizationRequest:authorizationRequest
+                                       externalUserAgent:externalUserAgent
+                    shouldSkipNonceAndAudienceValidation:NO
+                                                callback:callback];
+}
+
++ (id<OIDExternalUserAgentSession>)
+    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
+                            externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
+         shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
+                                     callback:(OIDAuthStateAuthorizationCallback)callback {
   // presents the authorization request
   id<OIDExternalUserAgentSession> authFlowSession = [OIDAuthorizationService
       presentAuthorizationRequest:authorizationRequest
@@ -141,6 +152,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                    [authorizationResponse tokenExchangeRequest];
                                [OIDAuthorizationService performTokenRequest:tokenExchangeRequest
                                               originalAuthorizationResponse:authorizationResponse
+                       shouldSkipNonceAndAudienceValidation:shouldSkipNonceAndAudienceValidation
                                    callback:^(OIDTokenResponse *_Nullable tokenResponse,
                                                          NSError *_Nullable tokenError) {
                                                 OIDAuthState *authState;

@@ -151,11 +151,35 @@ typedef void (^OIDRegistrationCompletion)(OIDRegistrationResponse *_Nullable reg
 
 /*! @brief Performs a token request.
     @param request The token request.
+    @param shouldSkipNonceAndAudienceValidation Whether to skip validation of the nonce and the
+        audience (aud) claims of the ID Token. Defaults to NO in the variants that omit this
+        parameter. Only set to YES when these claims are validated elsewhere (e.g. by a backend).
+    @param callback The method called when the request has completed or failed.
+ */
++ (void)performTokenRequest:(OIDTokenRequest *)request
+    shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
+                                callback:(OIDTokenCallback)callback;
+
+/*! @brief Performs a token request.
+    @param request The token request.
     @param authorizationResponse The original authorization response related to this token request.
     @param callback The method called when the request has completed or failed.
  */
 + (void)performTokenRequest:(OIDTokenRequest *)request
     originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
+                         callback:(OIDTokenCallback)callback;
+
+/*! @brief Performs a token request.
+    @param request The token request.
+    @param authorizationResponse The original authorization response related to this token request.
+    @param shouldSkipNonceAndAudienceValidation Whether to skip validation of the nonce and the
+        audience (aud) claims of the ID Token. Defaults to NO in the variants that omit this
+        parameter. Only set to YES when these claims are validated elsewhere (e.g. by a backend).
+    @param callback The method called when the request has completed or failed.
+ */
++ (void)performTokenRequest:(OIDTokenRequest *)request
+    originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
+shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
                          callback:(OIDTokenCallback)callback;
 
 /*! @brief Performs a registration request.

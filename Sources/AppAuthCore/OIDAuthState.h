@@ -140,6 +140,29 @@ static NSString *const kRefreshTokenRequestException =
                             externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
                                      callback:(OIDAuthStateAuthorizationCallback)callback;
 
+/*! @brief Convenience method to create a @c OIDAuthState by presenting an authorization request
+        and performing the authorization code exchange in the case of code flow requests. For
+        the hybrid flow, the caller should validate the id_token and c_hash, then perform the token
+        request (@c OIDAuthorizationService.performTokenRequest:callback:)
+        and update the OIDAuthState with the results (@c
+        OIDAuthState.updateWithTokenResponse:error:).
+    @param authorizationRequest The authorization request to present.
+    @param externalUserAgent A external user agent that can present an external user-agent request.
+    @param shouldSkipNonceAndAudienceValidation Whether to skip validation of the nonce and the
+        audience (aud) claims of the ID Token during the authorization code exchange. Defaults to NO
+        in the variant that omits this parameter. Only set to YES when these claims are validated
+        elsewhere (e.g. by a backend).
+    @param callback The method called when the request has completed or failed.
+    @return A @c OIDExternalUserAgentSession instance which will terminate when it
+        receives a @c OIDExternalUserAgentSession.cancel message, or after processing a
+        @c OIDExternalUserAgentSession.resumeExternalUserAgentFlowWithURL: message.
+ */
++ (id<OIDExternalUserAgentSession>)
+    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
+                            externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
+         shouldSkipNonceAndAudienceValidation:(BOOL)shouldSkipNonceAndAudienceValidation
+                                     callback:(OIDAuthStateAuthorizationCallback)callback;
+
 /*! @internal
     @brief Unavailable. Please use @c initWithAuthorizationResponse:.
  */
