@@ -34,4 +34,6 @@
         no callback url for this request.
  */
 - (NSString*)redirectScheme;
+
+- (NSURL*)redirectURL;
 @end
